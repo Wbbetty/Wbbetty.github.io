@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>service worker 示例</title>
+</head>
+<body>
+<div id="app">22222</div>
+<div id="log">22222</div>
+<script>
+  var log = document.getElementById('log')
+  var logContent = ''
+  function logMsg(msg) {
+      logContent += msg + '<br>'
+      log.innerHTML = logContent
+  }
+  if (navigator.serviceWorker) {
+    logMsg('支持service worker')
+    //为了减少性能损耗，一般直接在onload事件里面注册
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js', { scope: "/",})
+        .then(function(registration){
+          //注册成功
+          document.getElementById('app').innerHTML = '注册成功'
+          console.log("Service Worker registered with scope: ", registration.scope);
+        }).catch(function(err) {
+          //注册失败
+          document.getElementById('app').innerHTML = '注册失败'
+          console.log("Service Worker registered failed:", err);
+        });
+    })
+  } else {
+    logMsg('不支持service worker')
+  }
+</script>
+</body>
+</html>
